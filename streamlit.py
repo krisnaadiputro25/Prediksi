@@ -15,6 +15,9 @@ from statsmodels.tsa.stattools import adfuller
 from sklearn.metrics import mean_squared_error
 #import os
 #from dotenv import load_dotenv
+import os
+os.system("pip install matplotlib")
+
 
 # Koneksi ke MongoDB Atlas
 client = MongoClient("mongodb+srv://krisna:krisna@cluster0.3mao11f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
