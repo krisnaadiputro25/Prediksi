@@ -13,27 +13,21 @@ from sklearn.metrics import silhouette_score
 import numpy as np
 from statsmodels.tsa.stattools import adfuller
 from sklearn.metrics import mean_squared_error
-import os
-from dotenv import load_dotenv
-
-import os
-from dotenv import load_dotenv
-from pymongo import MongoClient
-
-# Load environment variables from .env file
-load_dotenv()
-
-# Secret key for JWT encoding and decoding
-#SECRET_KEY = os.environ.get("SECRET_KEY")  # Load the secret key from .env
+#import os
+#from dotenv import load_dotenv
 
 # Koneksi ke MongoDB Atlas
-MONGODB_URI = os.environ.get("MONGODB_URI")  # Load the MongoDB URI from .env
-client = MongoClient(MONGODB_URI)
+client = MongoClient("mongodb+srv://krisna:krisna@cluster0.3mao11f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 db = client['dbkrisna']
 collection_visualisasi = db['visualisasi']
 collection_arima = db['arima']
 collection_kmeans = db['kmeans']
 collection_history = db['history']
+
+#SECRET_KEY=your_secret_key  # Change this to a strong secret key
+#ADMIN_KEY=your_admin_key     # Change this to your admin key
+#MONGODB_URI=mongodb+srv://krisna:krisna@cluster0.3mao11f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+#DB_NAME=dbkrisna    
 
 def clear_collection(collection):
     with st.spinner("Mengosongkan collection..."):
