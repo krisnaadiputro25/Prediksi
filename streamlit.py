@@ -14,6 +14,7 @@ import numpy as np
 from statsmodels.tsa.stattools import adfuller
 from sklearn.metrics import mean_squared_error
 
+
 # Koneksi ke MongoDB Atlas
 client = MongoClient("mongodb+srv://krisna:krisna@cluster0.3mao11f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 db = client['dbkrisna']
@@ -155,6 +156,12 @@ def show_image_from_history(img_data):
     img = base64.b64decode(img_data)  # Mendekodekan base64
     st.image(img, use_container_width=True)
 
+# Fungsi untuk menghitung MAPE
+def calculate_mape(actual, predicted):
+    actual, predicted = np.array(actual), np.array(predicted)
+    mape = np.mean(np.abs((actual - predicted) / actual)) * 100
+    return mape
+
 # Fungsi untuk prediksi ARIMA
 def arima_prediction(data, years=1):
     with st.spinner("Membuat prediksi ARIMA..."):
@@ -184,6 +191,10 @@ def arima_prediction(data, years=1):
         rmse = np.sqrt(mean_squared_error(test, forecast_rmse))
         st.write(f"\nRMSE (Root Mean Squared Error): {rmse}")
 
+        # Hitung MAPE
+        mape = calculate_mape(test, forecast_rmse)
+        st.write(f"\nMAPE (Mean Absolute Percentage Error): {mape:.2f}%")
+
         months = years * 12
 
         model = ARIMA(time_series, order=(5, 1, 0))
@@ -191,11 +202,16 @@ def arima_prediction(data, years=1):
         summary = model_fit.summary()
         forecast = model_fit.forecast(steps=months)
 
+         # Membuat label bulan
+        #month_labels = [datetime(2020, (i % 12) + 1, 1).strftime('%b') for i in range(months)]
+
         fig, ax = plt.subplots()
         ax.plot(forecast, marker='o', linestyle='-', label='Forecast')
         ax.set_title('Prediksi ARIMA')
         ax.set_xlabel('Bulan')
         ax.set_ylabel('Tonase')
+        #ax.set_xticks(range(months))  # Set ticks sesuai jumlah bulan
+        #ax.set_xticklabels(month_labels, rotation=45)
         ax.legend()
 
         st.pyplot(fig)
